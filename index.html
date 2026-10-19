@@ -140,6 +140,8 @@
     .answer-block { margin-top: 24px; }
     .answer-label { display: block; margin-bottom: 8px; font-size: .95rem; color: var(--muted); }
     .answer-row { display: flex; gap: 10px; max-width: 590px; }
+    .answer-row.choice-submit-row { max-width: 250px; }
+    .answer-row.choice-submit-row .primary-btn { width: 100%; }
     .answer-row input { min-width: 0; flex: 1; border: 1px solid #49545b; border-radius: 0; padding: 12px 14px; background: #0f1316; color: var(--text); font-size: 1.05rem; }
     .answer-row input:disabled { opacity: .55; }
     .answer-row .primary-btn { padding: 12px 18px; }
@@ -264,12 +266,12 @@
           <p id="puzzleText" class="puzzle-text"></p>
           <div id="puzzleDisplay" class="puzzle-display"></div>
           <div class="answer-block">
-            <label id="answerLabel" class="answer-label" for="answerInput">학급 작전 답안</label>
+            <div id="answerLabel" class="answer-label">학급 작전 답안</div>
+            <div id="choiceAnswer" class="choice-list hidden" role="group" aria-label="답 선택"></div>
             <div id="inputAnswer" class="answer-row">
               <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="정답을 입력하세요">
               <button id="submitButton" class="primary-btn" type="button" disabled>제출 잠김</button>
             </div>
-            <div id="choiceAnswer" class="choice-list hidden" role="group" aria-label="답 선택"></div>
             <p id="message" class="message" aria-live="polite"></p>
             <div class="hint-area">
               <button id="hintOne" class="hint-btn" type="button">힌트 1 열기</button>
@@ -581,7 +583,10 @@
       document.getElementById("solution").classList.add("hidden");
       document.getElementById("answerInput").value = "";
       document.getElementById("answerInput").placeholder = level.placeholder || "정답을 입력하세요";
-      inputAnswer.classList.toggle("hidden", level.kind === "choice");
+      inputAnswer.classList.remove("hidden");
+      inputAnswer.classList.toggle("choice-submit-row", level.kind === "choice");
+      answerInput.classList.toggle("hidden", level.kind === "choice");
+      document.getElementById("answerLabel").textContent = level.kind === "choice" ? "학급 선택지 답안" : "학급 작전 답안";
       choiceAnswer.className = `choice-list ${level.choiceLayout || ""}`.trim();
       choiceAnswer.classList.toggle("hidden", level.kind !== "choice");
       choiceAnswer.innerHTML = "";
