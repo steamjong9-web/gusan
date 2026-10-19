@@ -1,0 +1,693 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#151511">
+  <title>진격의 거인: 트로스트 보급고 탈환 작전</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #151511;
+      --surface: #211f18;
+      --surface-2: #302c20;
+      --line: #484234;
+      --text: #eee8d7;
+      --muted: #b0a68e;
+      --cyan: #c7b078;
+      --amber: #e6b95f;
+      --red: #c96b56;
+      --green: #a9b583;
+      --shadow: 0 24px 70px rgba(0, 0, 0, .28);
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(ellipse at 82% 5%, rgba(199, 176, 120, .10), transparent 34%), radial-gradient(ellipse at 12% 88%, rgba(117, 54, 38, .12), transparent 38%), var(--bg);
+      color: var(--text);
+      font-family: "Segoe UI", "Malgun Gothic", system-ui, sans-serif;
+      line-height: 1.55;
+    }
+    button, input { font: inherit; }
+    button { color: inherit; }
+    button:focus-visible, input:focus-visible, summary:focus-visible { outline: 3px solid var(--amber); outline-offset: 3px; }
+    .shell { width: min(1160px, calc(100% - 36px)); margin: 0 auto; padding: 20px 0 34px; }
+    .topbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 8px 0 20px; border-bottom: 1px solid var(--line); }
+    .brand { display: flex; align-items: center; gap: 12px; letter-spacing: .13em; font-size: .82rem; font-weight: 700; }
+    .brand-mark { width: 12px; height: 12px; border: 2px solid var(--cyan); transform: rotate(45deg); box-shadow: 0 0 14px rgba(199, 176, 120, .45); }
+    .top-meta { display: flex; gap: 18px; color: var(--muted); font-size: .9rem; }
+    .screen { padding: 34px 0 0; }
+    .intro-layout { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(260px, .8fr); gap: clamp(28px, 6vw, 80px); align-items: center; min-height: 68vh; }
+    .eyebrow { color: var(--cyan); letter-spacing: .16em; font-size: .82rem; font-weight: 700; text-transform: uppercase; }
+    h1 { margin: 14px 0 18px; font-size: clamp(3rem, 8vw, 6.7rem); line-height: .94; letter-spacing: -.055em; }
+    h1 span { color: var(--cyan); }
+    .lede { max-width: 650px; color: #c5cdd1; font-size: clamp(1.05rem, 2vw, 1.28rem); }
+    .brief { margin-top: 34px; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+    .brief-item { padding: 14px 15px; border-left: 2px solid var(--line); color: var(--muted); font-size: .9rem; }
+    .brief-item strong { display: block; color: var(--text); font-size: 1.05rem; margin-bottom: 3px; }
+    .dispatch-art { display: block; width: min(100%, 690px); height: auto; margin: 22px 0 0; border: 1px solid #484234; background: #1b1a15; box-shadow: 0 18px 45px rgba(0, 0, 0, .24); }
+    .dispatch-stamp { display: inline-block; margin-top: 15px; padding: 5px 9px; border: 1px solid #9b594a; color: #d1856e; font: 700 .72rem ui-monospace, monospace; letter-spacing: .12em; transform: rotate(-2deg); }
+    .launch { border: 1px solid var(--line); background: linear-gradient(155deg, rgba(32, 39, 45, .94), rgba(24, 29, 33, .92)); padding: clamp(22px, 4vw, 36px); box-shadow: var(--shadow); }
+    .launch h2 { margin: 0 0 8px; font-size: 1.35rem; }
+    .launch p { color: var(--muted); margin: 0 0 20px; }
+    .duration-label { display: block; margin: 22px 0 9px; color: var(--muted); font-size: .9rem; }
+    .durations { display: flex; gap: 9px; flex-wrap: wrap; }
+    .duration, .choice, .hint-btn, .primary-btn, .ghost-btn, .teacher-btn {
+      border: 1px solid var(--line); background: var(--surface-2); padding: 10px 14px; cursor: pointer; transition: border-color .16s ease, background .16s ease, transform .16s ease;
+    }
+    .duration:hover, .choice:hover, .hint-btn:hover, .ghost-btn:hover, .teacher-btn:hover { border-color: var(--cyan); }
+    .duration[aria-pressed="true"], .choice[aria-pressed="true"] { border-color: var(--cyan); background: rgba(199, 176, 120, .13); color: var(--cyan); }
+    .primary-btn { background: var(--cyan); border-color: var(--cyan); color: #0e1716; font-weight: 800; }
+    .primary-btn:hover { transform: translateY(-1px); background: #a5f3e5; }
+    .primary-btn:disabled { opacity: .38; cursor: not-allowed; transform: none; }
+    .ghost-btn { background: transparent; }
+    .launch-action { width: 100%; margin-top: 22px; padding: 13px 18px; font-size: 1.05rem; }
+    .howto { margin-top: 20px; padding-top: 17px; border-top: 1px solid var(--line); color: var(--muted); font-size: .9rem; }
+    .howto strong { color: var(--text); }
+    .game-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 18px; }
+    .game-title h1 { margin: 4px 0 0; font-size: clamp(1.8rem, 4vw, 2.75rem); letter-spacing: -.03em; line-height: 1.1; }
+    .timer-box { min-width: 156px; text-align: right; }
+    .timer { font: 600 clamp(1.7rem, 4vw, 2.5rem)/1.1 ui-monospace, SFMono-Regular, Consolas, monospace; letter-spacing: .04em; font-variant-numeric: tabular-nums; }
+    .timer-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+    .timer-actions button { font-size: .82rem; padding: 6px 10px; }
+    .progress-wrap { display: flex; align-items: center; gap: 12px; margin: 20px 0 24px; }
+    .progress-label { flex: 0 0 auto; color: var(--muted); font-size: .87rem; }
+    .progress-track { height: 4px; flex: 1; background: #343c42; overflow: hidden; }
+    .progress-fill { height: 100%; width: 0; background: linear-gradient(90deg, #b38e52, #e6b95f); transition: width .3s ease; box-shadow: 0 0 12px rgba(230, 185, 95, .36); }
+    .progress-count { color: var(--cyan); font: 600 .9rem ui-monospace, monospace; }
+    .game-grid { display: grid; grid-template-columns: minmax(0, 1fr); gap: 18px; align-items: start; }
+    .puzzle { min-height: 520px; padding: clamp(22px, 4vw, 38px); border: 1px solid var(--line); background: rgba(24, 29, 33, .92); }
+    .round-label { color: var(--amber); font: 700 .82rem ui-monospace, monospace; letter-spacing: .13em; }
+    .puzzle h2 { margin: 8px 0 18px; font-size: clamp(1.65rem, 3.5vw, 2.4rem); line-height: 1.12; }
+    .puzzle-text { max-width: 760px; color: #d2d9dc; font-size: clamp(1.05rem, 2vw, 1.22rem); white-space: pre-line; }
+    .puzzle-display { margin: 26px 0; padding: clamp(18px, 4vw, 28px); background: #111619; border-left: 3px solid var(--cyan); font-size: clamp(1.35rem, 3vw, 2.2rem); font-weight: 700; letter-spacing: .04em; text-align: center; }
+    .puzzle-display .sub { display: block; margin-top: 8px; color: var(--muted); font-size: .72em; font-weight: 500; letter-spacing: 0; }
+    .visual-equations { display: grid; gap: 10px; max-width: 650px; margin: 0 auto; }
+    .equation-row { display: flex; align-items: center; justify-content: center; gap: clamp(7px, 2vw, 17px); min-height: 43px; }
+    .equation-row.final { margin-top: 7px; padding-top: 13px; border-top: 1px solid #3a464c; color: var(--amber); }
+    .shape { display: inline-flex; width: 30px; height: 30px; align-items: center; justify-content: center; font-size: 1.45em; line-height: 1; }
+    .shape.circle { color: #c96b56; }
+    .shape.triangle { color: #e6b95f; }
+    .shape.square { color: #9ba67e; }
+    .arrow-matrix { display: grid; grid-template-columns: repeat(3, minmax(58px, 86px)); gap: 7px; justify-content: center; max-width: 330px; margin: 0 auto; }
+    .arrow-matrix span { display: grid; min-height: 60px; place-items: center; background: #1b2227; color: var(--cyan); font-size: clamp(2rem, 5vw, 3rem); }
+    .arrow-matrix .missing { color: var(--amber); border: 1px dashed #66737b; background: transparent; }
+    .cube-net { display: grid; grid-template-columns: repeat(4, clamp(52px, 12vw, 78px)); grid-template-rows: repeat(3, clamp(52px, 12vw, 78px)); gap: 3px; justify-content: center; }
+    .cube-face { display: grid; place-items: center; border: 1px solid #7b8a91; background: #202a30; color: var(--cyan); font: 700 1.55rem ui-monospace, monospace; }
+    .cube-face.empty { border-color: transparent; background: transparent; }
+    .switch-scene { display: flex; align-items: center; justify-content: center; gap: clamp(18px, 5vw, 58px); flex-wrap: wrap; }
+    .switch-bank { display: flex; gap: 12px; }
+    .switch-unit { display: grid; gap: 8px; justify-items: center; min-width: 70px; color: var(--muted); font-size: .85rem; }
+    .switch-knob { width: 42px; height: 62px; display: grid; place-items: center; border: 1px solid #67747a; background: #202a30; color: var(--amber); font-size: 1.2rem; }
+    .bulb { font-size: clamp(3.2rem, 8vw, 5.3rem); filter: drop-shadow(0 0 13px rgba(255, 195, 109, .22)); }
+    .square-grid-svg { display: block; width: min(100%, 330px); height: auto; margin: 0 auto; }
+    .square-grid-svg line { stroke: #c7b078; stroke-width: 3; vector-effect: non-scaling-stroke; }
+    .scene-svg { display: block; width: min(100%, 680px); height: auto; margin: 0 auto; }
+    .code-panel { max-width: 760px; margin: 0 auto; }
+    .code-rule { margin-bottom: 14px; padding: 11px 14px; border: 1px solid #46545b; color: var(--amber); font-size: .92rem; }
+    .clue-row { display: grid; grid-template-columns: 100px 1fr; gap: 12px; align-items: center; padding: 12px 14px; border-bottom: 1px solid #303a40; background: #182025; text-align: left; }
+    .clue-guess { color: var(--cyan); font: 800 clamp(1.5rem, 4vw, 2.1rem) ui-monospace, monospace; letter-spacing: .18em; }
+    .clue-feedback { color: #d2d9dc; font-size: .98rem; font-weight: 500; letter-spacing: 0; }
+    .matrix-board { display: grid; grid-template-columns: repeat(3, minmax(64px, 94px)); gap: 7px; justify-content: center; margin: 0 auto; }
+    .matrix-cell { position: relative; display: flex; min-height: 76px; align-items: center; justify-content: center; gap: 8px; border: 1px solid #3c484f; background: #1b2227; }
+    .matrix-shape { font-size: clamp(1.8rem, 5vw, 2.5rem); line-height: 1; }
+    .matrix-shape.circle { color: #c96b56; }
+    .matrix-shape.triangle { color: var(--amber); }
+    .matrix-shape.square { color: #9ba67e; }
+    .matrix-count { color: var(--cyan); font-size: .95rem; letter-spacing: .05em; white-space: nowrap; }
+    .matrix-cell.missing { border: 1px dashed #738087; color: var(--amber); font-size: 1.8rem; }
+    .matrix-caption { margin-top: 12px; color: var(--muted); font-size: .86rem; }
+    .battery-scene { max-width: 680px; margin: 0 auto; }
+    .battery-row { display: flex; justify-content: center; gap: 8px; flex-wrap: wrap; margin: 0 auto 22px; }
+    .battery { display: grid; width: 52px; height: 68px; place-items: center; border: 2px solid #8a979e; border-radius: 5px; background: linear-gradient(145deg, #263138, #171d21); color: var(--green); font-size: 1.75rem; }
+    .scale-beam { position: relative; width: min(82%, 440px); height: 8px; margin: 0 auto; background: var(--cyan); transform: rotate(-2deg); }
+    .scale-beam::after { position: absolute; top: 6px; left: 50%; width: 0; height: 0; border-right: 27px solid transparent; border-bottom: 45px solid #53636b; border-left: 27px solid transparent; content: ""; transform: translateX(-50%); }
+    .scale-base { width: 110px; height: 8px; margin: 48px auto 0; background: #53636b; }
+    .scale-caption { margin-top: 12px; color: var(--muted); font-size: .9rem; }
+    .evidence-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; max-width: 700px; margin: 0 auto; text-align: left; }
+    .evidence-card { min-height: 108px; padding: 13px 15px; border: 1px solid #3c484f; background: #1b2227; }
+    .evidence-card strong { display: block; margin-bottom: 4px; color: var(--amber); font-size: 1rem; }
+    .evidence-card span { color: #d2d9dc; font-size: .96rem; }
+    .laser-wrap { max-width: 600px; margin: 0 auto; }
+    .laser-start { margin-bottom: 8px; color: var(--red); font-size: .95rem; font-weight: 800; }
+    .laser-board { display: grid; grid-template-columns: minmax(64px, 100px) repeat(5, minmax(40px, 62px)); gap: 5px; justify-content: center; }
+    .laser-side { display: grid; min-height: clamp(44px, 10vw, 64px); place-items: center; color: #66737b; }
+    .laser-start { display: grid; min-height: clamp(44px, 10vw, 64px); place-items: center; color: var(--red); font-size: .82rem; font-weight: 800; white-space: nowrap; }
+    .laser-cell { display: grid; min-height: clamp(44px, 10vw, 64px); place-items: center; border: 1px solid #3d4a51; background: #1a2227; color: var(--cyan); font: 700 clamp(1.5rem, 5vw, 2.2rem) ui-monospace, monospace; }
+    .laser-cell.mirror { color: var(--amber); background: #293035; }
+    .laser-exits { display: grid; grid-template-columns: minmax(64px, 100px) repeat(5, minmax(40px, 62px)); gap: 5px; justify-content: center; margin-top: 8px; color: var(--muted); font: 700 .9rem ui-monospace, monospace; }
+    .answer-block { margin-top: 24px; }
+    .answer-label { display: block; margin-bottom: 8px; font-size: .95rem; color: var(--muted); }
+    .answer-row { display: flex; gap: 10px; max-width: 590px; }
+    .answer-row input { min-width: 0; flex: 1; border: 1px solid #49545b; border-radius: 0; padding: 12px 14px; background: #0f1316; color: var(--text); font-size: 1.05rem; }
+    .answer-row input:disabled { opacity: .55; }
+    .answer-row .primary-btn { padding: 12px 18px; }
+    .choice-list { display: flex; gap: 10px; flex-wrap: wrap; }
+    .choice-list.long { display: grid; grid-template-columns: 1fr; max-width: 780px; }
+    .choice { flex: 1 1 44%; min-width: 120px; padding: 12px 16px; text-align: left; font-weight: 700; white-space: normal; }
+    .choice-list.compact .choice { flex: 0 0 auto; min-width: 64px; text-align: center; }
+    .message { min-height: 1.7em; margin: 13px 0 0; font-weight: 600; }
+    .message.error { color: var(--red); }
+    .message.ok { color: var(--green); }
+    .hint-area { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 18px; }
+    .hint-btn { color: var(--amber); font-size: .9rem; background: transparent; }
+    .hint-btn:disabled { opacity: .42; cursor: default; }
+    .hint-text { margin-top: 10px; color: var(--amber); min-height: 1.5em; }
+    .discussion-note { margin: 18px 0 0; padding: 13px 16px; border-left: 2px solid var(--amber); color: var(--muted); background: rgba(255, 195, 109, .045); }
+    details.teacher { margin-top: 16px; padding-top: 13px; border-top: 1px solid var(--line); }
+    details.teacher summary { cursor: pointer; color: var(--muted); font-size: .82rem; }
+    .teacher-btn { width: 100%; margin-top: 10px; font-size: .82rem; background: transparent; color: var(--amber); }
+    .solution { margin-top: 26px; padding: 18px; border-top: 1px solid var(--line); background: rgba(199, 176, 120, .055); }
+    .solution h3 { margin: 0 0 6px; color: var(--cyan); font-size: 1.1rem; }
+    .solution p { margin: 6px 0; color: #d2d9dc; }
+    .twist { margin-top: 12px !important; color: var(--amber) !important; }
+    .solution .primary-btn { margin-top: 14px; padding: 10px 16px; }
+    .finish { max-width: 880px; margin: 8vh auto 0; text-align: center; padding: 30px; }
+    .finish .big-check { color: var(--cyan); font-size: clamp(4rem, 13vw, 8rem); line-height: 1; }
+    .finish h1 { margin: 18px 0; font-size: clamp(2.5rem, 7vw, 5rem); }
+    .finish p { color: #c5cdd1; font-size: 1.08rem; }
+    .debrief { margin: 28px auto; max-width: 720px; text-align: left; padding: 18px 22px; border-left: 2px solid var(--amber); color: #d2d9dc; background: rgba(255, 195, 109, .06); }
+    .finish .primary-btn { margin-top: 8px; padding: 12px 22px; }
+    .hidden { display: none !important; }
+    .footer-note { margin-top: 28px; text-align: center; color: #7e898f; font-size: .8rem; }
+    @media (max-width: 820px) {
+      .intro-layout { grid-template-columns: 1fr; min-height: 0; }
+      .launch { max-width: 680px; }
+      .puzzle { min-height: 0; }
+    }
+    @media (max-width: 520px) {
+      .shell { width: min(100% - 24px, 1160px); padding-top: 12px; }
+      .topbar { align-items: flex-start; }
+      .top-meta { flex-direction: column; gap: 2px; text-align: right; font-size: .78rem; }
+      .brief { grid-template-columns: 1fr; gap: 3px; }
+      .brief-item { padding: 7px 12px; }
+      .game-head { align-items: center; }
+      .timer-box { min-width: 118px; }
+      .answer-row { flex-direction: column; }
+      .answer-row .primary-btn { width: 100%; }
+      .puzzle { padding: 20px 16px; }
+      .clue-row { grid-template-columns: 74px 1fr; gap: 8px; padding: 10px; }
+      .evidence-grid { grid-template-columns: 1fr; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { transition-duration: .01ms !important; scroll-behavior: auto !important; } }
+  </style>
+</head>
+<body>
+  <main class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-mark" aria-hidden="true"></span><span>조사병단&nbsp; / &nbsp;104기 작전 기록</span></div>
+      <div class="top-meta"><span>전원 참여 작전</span><span>10개 미션</span></div>
+    </header>
+
+    <section id="startView" class="screen">
+      <div class="intro-layout">
+        <div>
+          <div class="eyebrow">ATTACK ON TITAN · TROST DISTRICT</div>
+          <h1>트로스트 구<br><span>보급고 탈환</span></h1>
+          <p class="lede">거인이 트로스트 구로 몰려왔다. 보급고가 잠겨 입체기동장치의 가스와 칼날을 꺼낼 수 없다. 104기 훈련병 전원이 단서를 모아 열 개의 작전을 돌파하라.</p>
+          <div class="brief">
+            <div class="brief-item"><strong>그림 속 현장 단서</strong>발자국, 그림자, 정찰 지도</div>
+            <div class="brief-item"><strong>작전 퍼즐</strong>암호, 보급품, 신호 경로</div>
+            <div class="brief-item"><strong>열 개 미션</strong>교실 전체가 한 팀</div>
+          </div>
+          <svg class="dispatch-art" viewBox="0 0 720 270" role="img" aria-label="트로스트 구의 높은 성벽 너머로 거대한 그림자가 드리운 오리지널 작전 삽화">
+            <defs><linearGradient id="sky" x2="0" y2="1"><stop stop-color="#373326"/><stop offset="1" stop-color="#171713"/></linearGradient><linearGradient id="wall" x2="0" y2="1"><stop stop-color="#938565"/><stop offset="1" stop-color="#554e3c"/></linearGradient></defs>
+            <rect width="720" height="270" fill="url(#sky)"/><circle cx="590" cy="63" r="29" fill="#e2c98e" opacity=".72"/><path d="M0 186H720V270H0Z" fill="#28251c"/>
+            <path d="M0 146H720V220H0Z" fill="url(#wall)" stroke="#c1ad7d" stroke-width="4"/><path d="M0 161H720M0 195H720" stroke="#3c372b" stroke-width="4" opacity=".7"/>
+            <g fill="#6d634b" stroke="#c1ad7d" stroke-width="3"><path d="M44 145V108H84V145M100 145V119H132V145M570 145V111H610V145M628 145V101H671V145"/><path d="M49 108V98H58V108M69 108V98H78V108M576 111V101H585V111M596 111V101H605V111M635 101V91H644V101M655 101V91H664V101"/></g>
+            <g fill="#d6bb7c" opacity=".58"><rect x="62" y="122" width="8" height="12"/><rect x="586" y="124" width="8" height="12"/><rect x="647" y="113" width="8" height="12"/></g>
+            <path d="M386 220Q399 181 388 151L376 118Q371 104 382 100Q394 97 400 114L409 130L405 81Q404 68 415 66Q427 66 428 81L432 116L439 65Q441 52 452 54Q464 56 461 71L456 119L468 82Q473 69 484 75Q494 80 487 95L477 131Q499 111 511 121Q520 129 506 141L478 172L490 220Z" fill="#100f0d" stroke="#6f4639" stroke-width="4" opacity=".9"/>
+            <path d="M365 220H523" stroke="#c96b56" stroke-width="3" stroke-dasharray="8 9" opacity=".85"/><g fill="#e6b95f"><path d="M180 92l7 17 18 1-14 11 5 17-16-10-16 10 5-17-14-11 18-1Z"/><path d="M255 72l5 12 13 1-10 8 3 13-11-7-11 7 4-13-10-8 13-1Z"/></g>
+            <text x="28" y="35" fill="#d7c89f" font-size="15" font-family="Segoe UI, sans-serif" letter-spacing="3">FIELD DISPATCH · TROST</text><text x="691" y="247" fill="#d7c89f" font-size="12" text-anchor="end" font-family="ui-monospace, monospace">104TH CADET CORPS</text>
+          </svg>
+          <span class="dispatch-stamp">긴급 작전 · 제한 시간 내 보급고 개방</span>
+        </div>
+        <aside class="launch" aria-label="게임 설정">
+          <h2>작전 브리핑</h2>
+          <p>각 미션에서 짧게 작전 회의를 한 뒤, 반 전체의 답 하나를 제출합니다. 오답이면 단서를 다시 읽고 재도전!</p>
+          <span class="duration-label">제한 시간 선택</span>
+          <div class="durations" role="group" aria-label="게임 시간">
+            <button class="duration" type="button" data-minutes="25" aria-pressed="false">25분</button>
+            <button class="duration" type="button" data-minutes="35" aria-pressed="false">35분</button>
+            <button class="duration" type="button" data-minutes="45" aria-pressed="true">45분</button>
+          </div>
+          <button id="startButton" class="primary-btn launch-action" type="button">작전 시작</button>
+          <div class="howto"><strong>진행 방식</strong><br>미션마다 20초 개인 추리 → 작전 회의 → 학급 대표 제출. 오답 감점은 없고, 힌트는 두 번까지 열 수 있습니다.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="gameView" class="screen hidden" aria-live="polite">
+      <div class="game-head">
+        <div class="game-title">
+          <div id="roundLabel" class="eyebrow">MISSION 01 / 10</div>
+          <h1 id="levelTitle">작전 대기 중</h1>
+        </div>
+        <div class="timer-box">
+          <div id="timer" class="timer" aria-label="남은 시간">35:00</div>
+          <div class="timer-actions">
+            <button id="fullscreenButton" class="ghost-btn" type="button">전체 화면</button>
+            <button id="pauseButton" class="ghost-btn" type="button">일시 정지</button>
+            <button id="resetButton" class="ghost-btn" type="button">처음으로</button>
+          </div>
+        </div>
+      </div>
+      <div class="progress-wrap" aria-label="게임 진행">
+        <span class="progress-label">보급고 탈환</span>
+        <div class="progress-track"><div id="progressFill" class="progress-fill"></div></div>
+        <span id="progressCount" class="progress-count">0 / 10</span>
+      </div>
+      <div class="game-grid">
+        <section class="puzzle" aria-labelledby="levelTitle">
+          <div id="roundTag" class="round-label">MISSION 01</div>
+          <p id="puzzleText" class="puzzle-text"></p>
+          <div id="puzzleDisplay" class="puzzle-display"></div>
+          <div class="answer-block">
+            <label id="answerLabel" class="answer-label" for="answerInput">학급 작전 답안</label>
+            <div id="inputAnswer" class="answer-row">
+              <input id="answerInput" type="text" autocomplete="off" spellcheck="false" placeholder="정답을 입력하세요">
+              <button id="submitButton" class="primary-btn" type="button" disabled>제출 잠김</button>
+            </div>
+            <div id="choiceAnswer" class="choice-list hidden" role="group" aria-label="답 선택"></div>
+            <p id="message" class="message" aria-live="polite"></p>
+            <div class="hint-area">
+              <button id="hintOne" class="hint-btn" type="button">힌트 1 열기</button>
+              <button id="hintTwo" class="hint-btn" type="button" disabled>힌트 2 열기</button>
+            </div>
+            <p id="hintText" class="hint-text" aria-live="polite"></p>
+          </div>
+          <p class="discussion-note">잠깐! 단서를 전부 썼는지 확인하고, 작전 대표가 학급 답을 제출하세요.</p>
+          <div id="solution" class="solution hidden" aria-live="polite">
+            <h3>미션 성공</h3>
+            <p id="explanation"></p>
+            <p id="twist" class="twist"></p>
+            <button id="nextButton" class="primary-btn" type="button">다음 미션</button>
+          </div>
+          <details class="teacher">
+            <summary>교사용 선택: 타당한 다른 풀이 인정</summary>
+            <p class="participation-intro">학생이 다른 답을 근거로 증명했다면 교사가 확인한 뒤 잠금을 열 수 있습니다.</p>
+            <button id="teacherUnlock" class="teacher-btn" type="button">학급의 논리를 인정하고 열기</button>
+          </details>
+        </section>
+      </div>
+      <p id="timeNotice" class="footer-note" aria-live="polite"></p>
+    </section>
+
+    <section id="finishView" class="screen hidden">
+      <div class="finish">
+        <div class="big-check" aria-hidden="true">✓</div>
+        <div class="eyebrow">TROST SUPPLY DEPOT · SECURED</div>
+        <h1>보급고 탈환 성공</h1>
+        <p>104기 전원이 작전을 완수했습니다. 입체기동장치 보급품을 확보했습니다.</p>
+        <div class="debrief"><strong>오늘의 승부처</strong><br>거대한 힘보다 정확한 관찰과 작전 회의가 먼저였습니다. 그림의 단서, 여러 가능성을 좁히는 전략, 익숙한 경계를 의심하는 용기가 보급고를 열었습니다.</div>
+        <p>마무리 질문: 어느 미션에서 처음 세운 가설을 뒤집었나요?</p>
+        <button id="playAgain" class="primary-btn" type="button">작전 다시 시작</button>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const levels = [
+      {
+        title: "북쪽이 위가 아니라고?",
+        prompt: "아르민의 작전 지도는 90도 돌아가 있다. 나침반에서 북쪽은 화면 오른쪽이다. 시작점 S에서 북쪽으로 2칸, 동쪽으로 1칸, 남쪽으로 1칸 이동하면 어느 문에 도착할까? 한 번에 한 칸씩 이동한다.",
+        display: `<svg class="scene-svg" viewBox="0 0 600 400" role="img" aria-label="90도 돌아간 성벽 지도 격자, 시작 S와 A부터 D까지 네 문, 북쪽을 오른쪽으로 표시한 나침반">
+          <rect x="100" y="40" width="320" height="320" fill="#211f18" stroke="#e6b95f" stroke-width="4"/>
+          <path d="M180 40V360M260 40V360M340 40V360M100 120H420M100 200H420M100 280H420" stroke="#756a50" stroke-width="2"/>
+          <g text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="24" font-weight="800">
+            <text x="140" y="88" fill="#e6b95f">A</text><text x="140" y="168" fill="#c7b078">S</text><text x="380" y="168" fill="#e6b95f">C</text><text x="220" y="248" fill="#e6b95f">B</text><text x="300" y="328" fill="#e6b95f">D</text>
+          </g>
+          <circle cx="515" cy="95" r="36" fill="#302c20" stroke="#c7b078" stroke-width="2"/><path d="M493 95H540" stroke="#e6b95f" stroke-width="5"/><path d="M534 87L546 95L534 103" fill="none" stroke="#e6b95f" stroke-width="4"/><text x="515" y="54" fill="#eee8d7" text-anchor="middle" font-size="18" font-weight="700">북쪽</text>
+          <text x="515" y="160" fill="#b0a68e" text-anchor="middle" font-size="14">화면 오른쪽이 북</text><text x="260" y="389" fill="#b0a68e" text-anchor="middle" font-size="15">칸의 가운데 글자가 도착한 문이다</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["A문", "B문", "C문", "D문"], answer: "B문",
+        hints: ["평소 지도처럼 화면 위를 북쪽이라고 생각하면 틀립니다. 나침반이 가리키는 방향을 먼저 보세요.", "S에서 화면 오른쪽으로 두 칸, 아래로 한 칸, 왼쪽으로 한 칸입니다."],
+        explanation: "북쪽은 화면 오른쪽이므로 S에서 오른쪽으로 두 칸 가면 셋째 열입니다. 동쪽은 화면 아래라 한 칸 내려가고, 남쪽은 화면 왼쪽이라 한 칸 이동합니다. 마지막 위치는 B문입니다.",
+        twist: "뒤통수 포인트: 지도가 익숙한 방향으로 놓여 있다고 믿은 순간 길을 잘못 듭니다. 나침반이 지도보다 먼저입니다."
+      },
+      {
+        title: "전령새는 몇 km를 날았을까?",
+        prompt: "서로 20km 떨어진 두 정찰대가 말을 타고 서로를 향해 출발한다. 한쪽은 시속 3km, 다른 쪽은 시속 2km다. 전령새는 한쪽 정찰대에서 출발해 두 대가 만날 때까지 시속 10km로 쉬지 않고 왕복한다. 새가 날아간 총거리는?",
+        display: `<svg class="scene-svg" viewBox="0 0 620 230" role="img" aria-label="20킬로미터 떨어진 두 정찰대가 서로를 향해 가고 그 사이를 전령새가 왕복하는 그림">
+          <path d="M90 145H530" stroke="#756a50" stroke-width="5" stroke-dasharray="10 10"/><circle cx="105" cy="115" r="32" fill="#302c20" stroke="#c7b078" stroke-width="3"/><circle cx="515" cy="115" r="32" fill="#302c20" stroke="#c7b078" stroke-width="3"/>
+          <text x="105" y="122" fill="#eee8d7" text-anchor="middle" font-size="18" font-weight="700">정찰대 A</text><text x="515" y="122" fill="#eee8d7" text-anchor="middle" font-size="18" font-weight="700">정찰대 B</text>
+          <path d="M160 70H455" stroke="#e6b95f" stroke-width="3"/><path d="M160 70L173 62M160 70L173 78M455 70L442 62M455 70L442 78" stroke="#e6b95f" stroke-width="3"/><text x="307" y="55" fill="#e6b95f" text-anchor="middle" font-size="18" font-weight="700">20 km</text>
+          <path d="M155 174C225 135 260 205 330 165S430 145 470 180" fill="none" stroke="#c96b56" stroke-width="4" stroke-dasharray="9 7"/><path d="M461 171L475 179L460 185" fill="none" stroke="#c96b56" stroke-width="4"/><text x="310" y="218" fill="#b0a68e" text-anchor="middle" font-size="15">전령새 시속 10 km · 만날 때까지 왕복</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["20 km", "30 km", "40 km", "50 km"], answer: "40 km",
+        hints: ["왕복 횟수를 하나씩 세려 하지 말고, 두 정찰대가 만나는 데 걸리는 시간부터 구하세요.", "두 정찰대는 한 시간에 서로의 간격을 5km씩 줄입니다."],
+        explanation: "두 정찰대의 접근 속도는 3+2=5km/h입니다. 20km 간격은 4시간 뒤 사라집니다. 전령새는 그 4시간 동안 시속 10km로 날았으므로 총 40km입니다.",
+        twist: "뒤통수 포인트: 새가 몇 번 방향을 바꾸는지는 필요 없습니다. 두 정찰대가 만날 때까지의 시간만 구하면 됩니다."
+      },
+      {
+        title: "거인 구역을 피해 갈 수 있는 길",
+        prompt: "보급고에서 출발해 성문까지 가장 짧은 경로로 간다. 이동은 오른쪽 또는 위쪽으로만 할 수 있고, 거인이 표시된 칸은 지나갈 수 없다. 가장 짧은 경로는 모두 몇 개일까?",
+        display: `<svg class="scene-svg" viewBox="0 0 570 390" role="img" aria-label="오른쪽 위 성문까지 가는 4 곱하기 4 격자 지도. 거인 금지 칸 세 개가 길 중간에 표시됨">
+          <rect x="150" y="40" width="288" height="288" fill="#211f18" stroke="#e6b95f" stroke-width="4"/>
+          <path d="M222 40V328M294 40V328M366 40V328M150 112H438M150 184H438M150 256H438" stroke="#756a50" stroke-width="2"/>
+          <g fill="#753c30" opacity=".9"><rect x="222" y="184" width="72" height="72"/><rect x="294" y="184" width="72" height="72"/><rect x="294" y="112" width="72" height="72"/></g>
+          <g stroke="#e8c3a1" stroke-width="5" stroke-linecap="round"><path d="M239 204L277 240M277 204L239 240"/><path d="M311 204L349 240M349 204L311 240"/><path d="M311 132L349 168M349 132L311 168"/></g>
+          <text x="186" y="306" fill="#c7b078" text-anchor="middle" font-size="17" font-weight="800">출발 S</text><text x="402" y="82" fill="#e6b95f" text-anchor="middle" font-size="17" font-weight="800">성문 G</text><text x="290" y="365" fill="#b0a68e" text-anchor="middle" font-size="14">오른쪽·위쪽으로만 이동 · X칸은 통과 불가</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["2개", "3개", "4개", "5개"], answer: "3개",
+        hints: ["최단 경로는 오른쪽 3번, 위쪽 3번입니다. 거인 칸을 피해 가능한 순서를 세세요.", "첫 이동은 위쪽 또는 오른쪽입니다. 막힌 칸을 만나면 그 경로는 제외하세요."],
+        explanation: "가능한 최단 경로는 세 가지입니다. ① 오른쪽 3번 후 위쪽 3번, ② 위·위·오른쪽·위·오른쪽·오른쪽, ③ 위쪽 3번 후 오른쪽 3번입니다. 나머지는 거인 칸에 막힙니다.",
+        twist: "뒤통수 포인트: 한 경로를 찾는 문제가 아니라, 가장 짧은 경로를 빠짐없이 세는 문제입니다. 돌아가는 길은 정답에서 제외됩니다."
+      },
+      {
+        title: "지도와 장비를 가진 사람은 누구?",
+        prompt: "세 훈련병은 북쪽·동쪽·서쪽 길을 하나씩 맡고, 지도·신호탄·칼을 하나씩 나눠 가진다. 단서를 모두 이용해 지도를 가진 사람을 찾아라.\n\n① 도윤은 동쪽 길을 맡는다. ② 나리는 서쪽 길이 아니다. ③ 북쪽 길 담당은 칼을 가진다. ④ 준은 지도를 갖고 있지 않다.",
+        display: `<div class="evidence-grid" role="img" aria-label="나리, 도윤, 준 세 훈련병의 경로와 장비를 추리하는 작전 카드">
+          <div class="evidence-card"><strong>나리</strong><span>경로 ?　 장비 ?</span></div><div class="evidence-card"><strong>도윤</strong><span>경로 동쪽　 장비 ?</span></div><div class="evidence-card"><strong>준</strong><span>경로 ?　 장비 지도 아님</span></div>
+        </div><div class="code-rule">북쪽 · 동쪽 · 서쪽 경로는 겹치지 않음<br>지도 · 신호탄 · 칼도 한 사람당 하나씩</div>`,
+        kind: "choice", choiceLayout: "compact", options: ["나리", "도윤", "준"], answer: "도윤",
+        hints: ["먼저 도윤의 동쪽과 나리의 ‘서쪽 아님’을 배치하면 남는 경로가 정해집니다.", "나리는 북쪽, 준은 서쪽입니다. 북쪽 사람은 칼을 가지므로 나머지 장비를 배치하세요."],
+        explanation: "도윤은 동쪽입니다. 나리는 서쪽이 아니므로 남은 북쪽을 맡고, 준은 서쪽입니다. 북쪽 담당 나리는 칼을 가집니다. 준은 지도가 아니므로 신호탄을 갖고, 남은 지도는 도윤의 몫입니다.",
+        twist: "뒤통수 포인트: 장비 단서만 따로 보면 답이 안 나옵니다. 경로부터 정한 뒤 장비를 배치해야 합니다."
+      },
+      {
+        title: "횃불 하나로 성벽 통로 건너기",
+        prompt: "좁은 성벽 통로를 훈련병 네 명이 건너야 한다. 한 번에 최대 두 명만 갈 수 있고, 어두워서 횃불이 꼭 필요하다. 횃불은 하나뿐이며 건너는 속도는 느린 사람 기준이다. 네 명의 시간은 1분·2분·7분·10분. 모두 건너는 가장 빠른 시간은?",
+        display: `<svg class="scene-svg" viewBox="0 0 620 250" role="img" aria-label="1분, 2분, 7분, 10분이 걸리는 네 명의 훈련병이 횃불 하나로 두 성벽 사이의 좁은 다리를 건너야 하는 그림">
+          <path d="M40 195H190M430 195H580" stroke="#756a50" stroke-width="8"/><path d="M175 195L225 165H395L445 195" fill="#302c20" stroke="#c7b078" stroke-width="4"/><path d="M225 165V195M395 165V195" stroke="#756a50" stroke-width="4"/>
+          <g font-family="Segoe UI, sans-serif" text-anchor="middle" font-weight="800"><circle cx="78" cy="110" r="28" fill="#302c20" stroke="#e6b95f" stroke-width="3"/><text x="78" y="117" fill="#eee8d7" font-size="20">1분</text><circle cx="148" cy="110" r="28" fill="#302c20" stroke="#e6b95f" stroke-width="3"/><text x="148" y="117" fill="#eee8d7" font-size="20">2분</text><circle cx="472" cy="110" r="28" fill="#302c20" stroke="#c96b56" stroke-width="3"/><text x="472" y="117" fill="#eee8d7" font-size="20">7분</text><circle cx="542" cy="110" r="28" fill="#302c20" stroke="#c96b56" stroke-width="3"/><text x="542" y="117" fill="#eee8d7" font-size="20">10분</text></g>
+          <path d="M296 118Q310 94 324 118Q310 142 296 118Z" fill="#e6b95f"/><path d="M310 141V165" stroke="#e6b95f" stroke-width="5"/><text x="310" y="225" fill="#b0a68e" text-anchor="middle" font-size="14">횃불은 항상 건너는 사람과 함께 이동</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["15분", "17분", "19분", "20분"], answer: "17분",
+        hints: ["느린 두 명을 따로 보내면 시간이 크게 늘어납니다. 가장 빠른 두 명이 횃불을 돌려주는 역할을 맡을 수 있습니다.", "1·2분 팀이 먼저 같이 가고, 1분 팀이 돌아옵니다. 그다음 7·10분 팀을 함께 보내 보세요."],
+        explanation: "1·2분 팀이 건너가 2분, 1분 팀이 돌아와 1분, 7·10분 팀이 건너가 10분, 2분 팀이 횃불을 가져와 2분, 마지막으로 1·2분 팀이 함께 건너가 2분입니다. 합계 17분입니다.",
+        twist: "뒤통수 포인트: 빠른 두 명은 짐처럼 횃불만 옮기는 게 아니라, 느린 두 명을 함께 보내는 작전의 핵심입니다."
+      },
+      {
+        title: "마지막 신호탄을 가져가라",
+        prompt: "신호탄 21개를 두 팀이 번갈아 가져간다. 한 번에 1개, 2개, 3개 중 하나만 가져갈 수 있고 마지막 신호탄을 가져가는 팀이 이긴다. 상대가 최선으로 움직인다면, 먼저 시작하는 우리 반은 첫 차례에 몇 개를 가져가야 이길 수 있을까?",
+        display: `<svg class="scene-svg" viewBox="0 0 600 210" role="img" aria-label="세 줄로 놓인 신호탄 스물한 개와 1개에서 3개를 골라 가져가는 규칙">
+          <g fill="#c96b56" stroke="#e6b95f" stroke-width="2"><circle cx="120" cy="55" r="16"/><circle cx="180" cy="55" r="16"/><circle cx="240" cy="55" r="16"/><circle cx="300" cy="55" r="16"/><circle cx="360" cy="55" r="16"/><circle cx="420" cy="55" r="16"/><circle cx="480" cy="55" r="16"/><circle cx="120" cy="105" r="16"/><circle cx="180" cy="105" r="16"/><circle cx="240" cy="105" r="16"/><circle cx="300" cy="105" r="16"/><circle cx="360" cy="105" r="16"/><circle cx="420" cy="105" r="16"/><circle cx="480" cy="105" r="16"/><circle cx="120" cy="155" r="16"/><circle cx="180" cy="155" r="16"/><circle cx="240" cy="155" r="16"/><circle cx="300" cy="155" r="16"/><circle cx="360" cy="155" r="16"/><circle cx="420" cy="155" r="16"/><circle cx="480" cy="155" r="16"/></g>
+          <text x="300" y="200" fill="#b0a68e" text-anchor="middle" font-size="14">매 차례 1~3개 · 마지막 하나를 가져가면 승리</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["1개", "2개", "3개"], answer: "1개",
+        hints: ["상대에게 신호탄을 몇 개 남겨주면 다음 차례에 어떤 수를 골라도 대응할 수 있을까요?", "상대 차례가 끝난 뒤 4의 배수가 남게 만들 수 있는지 보세요."],
+        explanation: "처음에 1개를 가져가면 20개가 남습니다. 이후 상대가 1~3개를 가져갈 때마다 우리는 합계가 4개가 되도록 가져옵니다. 그러면 상대 차례마다 16, 12, 8, 4개가 남고, 마지막 하나를 우리가 가져갑니다.",
+        twist: "작전 반전: 한 번에 많이 가져가는 게 유리한 건 아닙니다. 매 턴 상대의 선택을 받아 4개 묶음으로 되돌리는 전략이 이깁니다."
+      },
+      {
+        title: "기어 다섯 개, 마지막 방향은?",
+        prompt: "보급고 문을 여는 기어가 일렬로 맞물려 있다. A 기어가 시계 방향으로 돈다면, E 기어는 어느 방향으로 돌까? 기어 크기는 속도에만 영향을 준다.",
+        display: `<svg class="scene-svg" viewBox="0 0 500 200" role="img" aria-label="서로 맞물린 크기가 다른 다섯 개 기어 A부터 E까지. A는 시계 방향으로 회전하는 화살표가 표시됨">
+          <defs><marker id="gearArrow" markerWidth="10" markerHeight="10" refX="7" refY="3" orient="auto"><path d="M0,0 L0,6 L8,3 z" fill="#e6b95f"/></marker></defs>
+          <g fill="#302c20" stroke="#c7b078" stroke-width="5"><circle cx="70" cy="100" r="38"/><circle cx="146" cy="100" r="38"/><circle cx="222" cy="100" r="38"/><circle cx="298" cy="100" r="38"/><circle cx="374" cy="100" r="38"/></g>
+          <g stroke="#756a50" stroke-width="3"><path d="M70 57V68M70 132V143M27 100H38M102 100H113M146 57V68M146 132V143M103 100H114M178 100H189M222 57V68M222 132V143M179 100H190M254 100H265M298 57V68M298 132V143M255 100H266M330 100H341M374 57V68M374 132V143M331 100H342M406 100H417"/></g>
+          <g fill="#e6b95f" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="20" font-weight="800"><text x="70" y="107">A</text><text x="146" y="107">B</text><text x="222" y="107">C</text><text x="298" y="107">D</text><text x="374" y="107">E</text></g>
+          <path d="M49 69A28 28 0 1 1 91 77" fill="none" stroke="#e6b95f" stroke-width="4" marker-end="url(#gearArrow)"/><text x="222" y="184" fill="#b0a68e" text-anchor="middle" font-size="14">외부 기어끼리 맞물릴 때마다 방향이 바뀐다</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["시계 방향", "시계 반대 방향"], answer: "시계 방향",
+        hints: ["한 쌍이 맞물릴 때마다 회전 방향이 뒤집힙니다. A→B부터 차례로 표시하세요.", "A에서 E까지 맞물림은 네 번입니다."],
+        explanation: "A→B, B→C, C→D, D→E로 네 번 맞물립니다. 매번 방향이 반대로 바뀌므로 네 번 뒤에는 A와 같은 시계 방향입니다.",
+        twist: "뒤통수 포인트: 기어 크기가 달라도 맞물린 기어의 회전 방향은 반대입니다. 크기는 회전 속도를 바꿉니다."
+      },
+      {
+        title: "성벽 좌표 암호를 풀어라",
+        prompt: "성벽에 남긴 좌표 암호는 (행, 열) 순서다. 아래 표에서 22 · 11 · 44 · 15를 차례로 읽으면 어느 목표가 나올까?",
+        display: `<div class="code-panel"><div class="code-rule">좌표는 (행, 열) · J는 생략</div><div style="display:grid;grid-template-columns:28px repeat(5,minmax(40px,1fr));gap:4px;max-width:380px;margin:0 auto;text-align:center;font-weight:800">
+          <span></span><span class="matrix-cell">1</span><span class="matrix-cell">2</span><span class="matrix-cell">3</span><span class="matrix-cell">4</span><span class="matrix-cell">5</span>
+          <span class="matrix-cell">1</span><span class="matrix-cell">A</span><span class="matrix-cell">B</span><span class="matrix-cell">C</span><span class="matrix-cell">D</span><span class="matrix-cell">E</span>
+          <span class="matrix-cell">2</span><span class="matrix-cell">F</span><span class="matrix-cell">G</span><span class="matrix-cell">H</span><span class="matrix-cell">I</span><span class="matrix-cell">K</span>
+          <span class="matrix-cell">3</span><span class="matrix-cell">L</span><span class="matrix-cell">M</span><span class="matrix-cell">N</span><span class="matrix-cell">O</span><span class="matrix-cell">P</span>
+          <span class="matrix-cell">4</span><span class="matrix-cell">Q</span><span class="matrix-cell">R</span><span class="matrix-cell">S</span><span class="matrix-cell">T</span><span class="matrix-cell">U</span>
+          <span class="matrix-cell">5</span><span class="matrix-cell">V</span><span class="matrix-cell">W</span><span class="matrix-cell">X</span><span class="matrix-cell">Y</span><span class="matrix-cell">Z</span>
+        </div><div class="puzzle-display" style="margin:18px auto 0;padding:12px">22 · 11 · 44 · 15</div></div>`,
+        kind: "choice", choiceLayout: "compact", options: ["GATE", "WALL", "GEAR", "EXIT"], answer: "GATE",
+        hints: ["첫 숫자는 행, 둘째 숫자는 열입니다. 22는 둘째 행 둘째 칸입니다.", "네 좌표를 차례로 읽으면 G-A-T-E가 됩니다."],
+        explanation: "22는 G, 11은 A, 44는 T, 15는 E입니다. 암호는 GATE, 즉 성문입니다.",
+        twist: "작전 반전: 좌표의 순서를 열·행으로 뒤집어 읽으면 엉뚱한 글자가 나옵니다. 암호표 위의 규칙 한 줄을 놓치지 마세요."
+      },
+      {
+        title: "시계 없이 45분 재기",
+        prompt: "대포 신호에 맞춰 정확히 45분 뒤 보급고 문을 열어야 한다. 불규칙하게 타지만 각각 다 타는 데 정확히 60분 걸리는 도화선 두 개와 성냥이 있다. 시계 없이 45분을 재는 방법은?",
+        display: `<svg class="scene-svg" viewBox="0 0 600 230" role="img" aria-label="각각 60분 동안 불규칙하게 타는 도화선 두 개와 양쪽 끝 표시">
+          <text x="65" y="62" fill="#e6b95f" font-size="18" font-weight="800">도화선 A</text><path d="M180 56H520" stroke="#b0a68e" stroke-width="10" stroke-linecap="round"/><circle cx="180" cy="56" r="11" fill="#c96b56"/><circle cx="520" cy="56" r="11" fill="#c96b56"/><text x="180" y="34" fill="#b0a68e" text-anchor="middle" font-size="14">끝 1</text><text x="520" y="34" fill="#b0a68e" text-anchor="middle" font-size="14">끝 2</text>
+          <text x="65" y="152" fill="#e6b95f" font-size="18" font-weight="800">도화선 B</text><path d="M180 146H520" stroke="#b0a68e" stroke-width="10" stroke-linecap="round"/><circle cx="180" cy="146" r="11" fill="#c96b56"/><circle cx="520" cy="146" r="11" fill="#c96b56"/><text x="300" y="205" fill="#b0a68e" text-anchor="middle" font-size="14">각 도화선은 한쪽 끝에서 다 타면 60분 (타는 속도는 일정하지 않음)</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "long", options: ["A와 B를 한쪽 끝씩 동시에 붙인다.", "A는 양쪽 끝에 불을 붙이고, B는 한쪽 끝만 붙인다. A가 다 타면 B의 반대쪽 끝에도 불을 붙인다.", "A를 먼저 다 태우고 그다음 B를 태운다.", "A와 B를 양쪽 끝에 모두 붙이고, 절반쯤 탔을 때 끈다."],
+        answer: "A는 양쪽 끝에 불을 붙이고, B는 한쪽 끝만 붙인다. A가 다 타면 B의 반대쪽 끝에도 불을 붙인다.",
+        hints: ["불규칙하게 타므로 도화선의 길이를 시간으로 바꿀 수 없습니다. 양쪽에서 붙이면 한 도화선이 다 타는 시간은 어떻게 될까요?", "A가 다 타는 데 30분입니다. 그 순간 B의 남은 부분을 양쪽에서 태우면 몇 분일까요?"],
+        explanation: "처음에 A 양쪽 끝과 B 한쪽 끝에 불을 붙입니다. A는 양쪽에서 타므로 30분 뒤 다 탑니다. 그때 B의 반대쪽 끝에도 불을 붙이면 B의 남은 부분은 15분 만에 다 타므로 총 45분입니다.",
+        twist: "뒤통수 포인트: 도화선의 절반 길이가 30분 분량이라고 가정하면 안 됩니다. 양쪽 점화가 시간을 정확히 반으로 줄입니다."
+      },
+      {
+        title: "신호탑 도면 속 삼각형은 몇 개?",
+        prompt: "정찰대가 남긴 신호탑 도면이다. 크기가 다른 삼각형을 전부 세어라. 작은 칸만 세면 안 된다.",
+        display: `<svg class="scene-svg" viewBox="0 0 440 320" role="img" aria-label="큰 삼각형을 한 변씩 세 칸으로 나눈 삼각 격자 도면">
+          <path d="M220 35L100 275L340 275Z M180 115H260 M140 195H300 M100 275H340 M180 115L140 195 M180 115L100 275 M180 115L220 195 M260 115L220 195 M260 115L300 195 M260 115L340 275 M140 195L100 275 M140 195L180 275 M220 195L180 275 M220 195L260 275 M300 195L260 275 M300 195L340 275" fill="none" stroke="#e6b95f" stroke-width="3" stroke-linejoin="round"/>
+          <text x="220" y="306" fill="#b0a68e" text-anchor="middle" font-size="15">선이 완전히 이어진 삼각형만 센다</text>
+        </svg>`,
+        kind: "choice", choiceLayout: "compact", options: ["9개", "12개", "13개", "15개"], answer: "13개",
+        hints: ["가장 작은 것만 먼저 세고, 한 변이 두 칸인 것과 전체 삼각형도 찾아보세요.", "작은 삼각형 9개, 두 칸 크기 3개, 전체 크기 1개입니다."],
+        explanation: "작은 삼각형 9개, 한 변이 두 칸인 삼각형 3개, 전체 삼각형 1개를 합쳐 13개입니다.",
+        twist: "뒤통수 포인트: 격자 안의 빈 공간을 거꾸로 향한 삼각형이라고 착각하기 쉽습니다. 선이 세 변을 모두 만들 때만 셉니다."
+      }
+    ];
+
+    const startView = document.getElementById("startView");
+    const gameView = document.getElementById("gameView");
+    const finishView = document.getElementById("finishView");
+    const timerEl = document.getElementById("timer");
+    const durationButtons = [...document.querySelectorAll(".duration")];
+    let durationMinutes = 45;
+    let remainingSeconds = durationMinutes * 60;
+    let timerInterval = null;
+    let isPaused = false;
+    let currentLevel = 0;
+    let selectedChoice = "";
+    let hintsShown = 0;
+    let solved = false;
+
+    const submitButton = document.getElementById("submitButton");
+    const answerInput = document.getElementById("answerInput");
+    const message = document.getElementById("message");
+    const solution = document.getElementById("solution");
+    const choiceAnswer = document.getElementById("choiceAnswer");
+    const inputAnswer = document.getElementById("inputAnswer");
+
+    choiceAnswer.addEventListener("click", event => {
+      const button = event.target.closest("button.choice");
+      if (!button || solved) return;
+      selectedChoice = button.dataset.answer || button.textContent;
+      [...choiceAnswer.querySelectorAll(".choice")].forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      updateSubmitState();
+    });
+
+    durationButtons.forEach(button => {
+      button.addEventListener("click", () => {
+        durationMinutes = Number(button.dataset.minutes);
+        durationButtons.forEach(item => item.setAttribute("aria-pressed", String(item === button)));
+      });
+    });
+
+    function formatTime(total) {
+      const minutes = Math.floor(total / 60).toString().padStart(2, "0");
+      const seconds = (total % 60).toString().padStart(2, "0");
+      return `${minutes}:${seconds}`;
+    }
+
+    function updateTimer() {
+      timerEl.textContent = formatTime(remainingSeconds);
+      if (remainingSeconds === 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        isPaused = true;
+        document.getElementById("pauseButton").textContent = "계속 진행";
+        document.getElementById("timeNotice").textContent = "선택한 시간이 끝났습니다. 수업을 이어가려면 계속 진행을 누르세요. 게임은 계속 풀 수 있습니다.";
+      }
+    }
+
+    function startTimer() {
+      clearInterval(timerInterval);
+      isPaused = false;
+      document.getElementById("pauseButton").textContent = "일시 정지";
+      timerInterval = setInterval(() => {
+        if (!isPaused && remainingSeconds > 0) {
+          remainingSeconds -= 1;
+          updateTimer();
+        }
+      }, 1000);
+    }
+
+    document.getElementById("startButton").addEventListener("click", () => {
+      remainingSeconds = durationMinutes * 60;
+      updateTimer();
+      startView.classList.add("hidden");
+      finishView.classList.add("hidden");
+      gameView.classList.remove("hidden");
+      currentLevel = 0;
+      renderLevel();
+      startTimer();
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    });
+
+    document.getElementById("pauseButton").addEventListener("click", () => {
+      if (remainingSeconds === 0) remainingSeconds = 0;
+      isPaused = !isPaused;
+      document.getElementById("pauseButton").textContent = isPaused ? "계속 진행" : "일시 정지";
+      if (!isPaused && !timerInterval && remainingSeconds > 0) startTimer();
+    });
+
+    document.getElementById("fullscreenButton").addEventListener("click", async () => {
+      if (!document.fullscreenElement) {
+        try { await document.documentElement.requestFullscreen(); } catch (_) {}
+      } else if (document.exitFullscreen) {
+        await document.exitFullscreen();
+      }
+    });
+
+    document.getElementById("resetButton").addEventListener("click", () => {
+      if (window.confirm("진행 상황을 지우고 처음부터 시작할까요?")) resetGame();
+    });
+
+    document.getElementById("playAgain").addEventListener("click", resetGame);
+
+    function resetGame() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      isPaused = false;
+      currentLevel = 0;
+      gameView.classList.add("hidden");
+      finishView.classList.add("hidden");
+      startView.classList.remove("hidden");
+      document.getElementById("timeNotice").textContent = "";
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function renderLevel() {
+      const level = levels[currentLevel];
+      hintsShown = 0;
+      selectedChoice = "";
+      solved = false;
+      document.getElementById("roundLabel").textContent = `MISSION ${String(currentLevel + 1).padStart(2, "0")} / ${String(levels.length).padStart(2, "0")}`;
+      document.getElementById("roundTag").textContent = `MISSION ${String(currentLevel + 1).padStart(2, "0")}`;
+      document.getElementById("levelTitle").textContent = level.title;
+      document.getElementById("puzzleText").textContent = level.prompt;
+      const display = document.getElementById("puzzleDisplay");
+      display.className = "puzzle-display";
+      display.innerHTML = level.display;
+      document.getElementById("progressCount").textContent = `${currentLevel} / ${levels.length}`;
+      document.getElementById("progressFill").style.width = `${currentLevel / levels.length * 100}%`;
+      document.getElementById("message").textContent = "";
+      document.getElementById("message").className = "message";
+      document.getElementById("hintText").textContent = "";
+      document.getElementById("hintOne").disabled = false;
+      document.getElementById("hintTwo").disabled = true;
+      document.getElementById("solution").classList.add("hidden");
+      document.getElementById("answerInput").value = "";
+      document.getElementById("answerInput").placeholder = level.placeholder || "정답을 입력하세요";
+      inputAnswer.classList.toggle("hidden", level.kind === "choice");
+      choiceAnswer.className = `choice-list ${level.choiceLayout || ""}`.trim();
+      choiceAnswer.classList.toggle("hidden", level.kind !== "choice");
+      choiceAnswer.innerHTML = "";
+      if (level.kind === "choice") {
+        level.options.forEach(option => {
+          const button = document.createElement("button");
+          button.className = "choice";
+          button.type = "button";
+          button.textContent = option;
+          button.dataset.answer = option;
+          button.setAttribute("aria-pressed", "false");
+          choiceAnswer.appendChild(button);
+        });
+      }
+      updateSubmitState();
+      document.getElementById("timeNotice").textContent = "";
+      if (level.kind === "input") answerInput.focus({ preventScroll: true });
+    }
+
+    function updateSubmitState() {
+      const level = levels[currentLevel];
+      const hasAnswer = level.kind === "choice" ? Boolean(selectedChoice) : Boolean(answerInput.value.trim());
+      submitButton.disabled = solved || (level.kind !== "choice" && !hasAnswer);
+      submitButton.textContent = solved ? "잠금 해제 완료" : hasAnswer ? "학급 답 제출" : level.kind === "choice" ? "답 선택 후 제출" : "답을 입력하세요";
+    }
+
+    answerInput.addEventListener("input", updateSubmitState);
+    answerInput.addEventListener("keydown", event => {
+      if (event.key === "Enter" && !submitButton.disabled) checkAnswer();
+    });
+    submitButton.addEventListener("click", checkAnswer);
+
+    function normalize(value) {
+      return String(value).toLowerCase().replace(/,/g, ".").replace(/[\s，。°\-→:]/g, "");
+    }
+
+    function checkAnswer() {
+      if (solved) return;
+      const level = levels[currentLevel];
+      const guess = level.kind === "choice" ? selectedChoice : answerInput.value;
+      if (!String(guess).trim()) {
+        message.textContent = level.kind === "choice" ? "먼저 선택지를 눌러 답을 고르세요." : "정답을 입력해 주세요.";
+        message.className = "message error";
+        return;
+      }
+      const correct = normalize(guess) === normalize(level.answer);
+      if (correct) {
+        solveLevel();
+      } else {
+        message.textContent = "잠금이 유지됩니다. 그림의 조건과 계산 순서를 다시 확인하세요.";
+        message.className = "message error";
+      }
+    }
+
+    function solveLevel() {
+      solved = true;
+      message.textContent = "작전 성공! 보급고 봉쇄가 한 단계 풀렸습니다.";
+      message.className = "message ok";
+      document.getElementById("explanation").textContent = levels[currentLevel].explanation;
+      document.getElementById("twist").textContent = levels[currentLevel].twist;
+      document.getElementById("nextButton").textContent = currentLevel === levels.length - 1 ? "탈환 결과 확인" : "다음 미션";
+      solution.classList.remove("hidden");
+      updateSubmitState();
+      isPaused = true;
+      document.getElementById("pauseButton").textContent = "계속 진행";
+      document.getElementById("solution").scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+
+    document.getElementById("teacherUnlock").addEventListener("click", () => {
+      if (window.confirm("학급이 타당한 풀이를 근거와 함께 설명했나요? 확인했다면 잠금을 엽니다.")) solveLevel();
+    });
+
+    document.getElementById("nextButton").addEventListener("click", () => {
+      if (currentLevel < levels.length - 1) {
+        currentLevel += 1;
+        renderLevel();
+        if (remainingSeconds > 0) startTimer();
+      } else {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        gameView.classList.add("hidden");
+        finishView.classList.remove("hidden");
+        document.getElementById("progressFill").style.width = "100%";
+        document.getElementById("progressCount").textContent = `${levels.length} / ${levels.length}`;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      }
+    });
+
+    document.getElementById("hintOne").addEventListener("click", () => revealHint(1));
+    document.getElementById("hintTwo").addEventListener("click", () => revealHint(2));
+
+    function revealHint(number) {
+      const level = levels[currentLevel];
+      if (number === 1 && hintsShown < 1) {
+        hintsShown = 1;
+        document.getElementById("hintText").textContent = `힌트 1: ${level.hints[0]}`;
+        document.getElementById("hintOne").disabled = true;
+        document.getElementById("hintTwo").disabled = false;
+      } else if (number === 2 && hintsShown === 1) {
+        hintsShown = 2;
+        document.getElementById("hintText").textContent = `힌트 2: ${level.hints[1]}`;
+        document.getElementById("hintTwo").disabled = true;
+      }
+    }
+
+    updateTimer();
+  </script>
+</body>
+</html>
